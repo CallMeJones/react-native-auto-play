@@ -69,6 +69,7 @@ const getMainSection = (): Section<ListTemplate> => {
       type: 'toggle',
       title: { text: 'row #2' },
       checked: checked[1],
+      imageType: 'large',
       image: {
         name: 'bomb',
         type: 'glyph',
@@ -137,6 +138,10 @@ const getTemplate = (props?: { mapConfig?: ListTemplateConfig['mapConfig'] }): L
     mapConfig: props?.mapConfig,
     headerActions: AutoTemplate.headerActions,
     sections: getMainSection(),
+    onDidAppear: () => console.log('ListTemplate onDidAppear'),
+    onDidDisappear: () => console.log('ListTemplate onDidDisappear'),
+    onWillAppear: () => console.log('ListTemplate onWillAppear'),
+    onWillDisappear: () => console.log('ListTemplate onWillDisappear'),
     onPopped: () => console.log('ListTemplate onPopped'),
   });
 };
