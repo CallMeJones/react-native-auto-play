@@ -9,8 +9,7 @@ import CarPlay
 class TemplateStore {
     /// Guards `store`. Templates are added from the JS thread (the
     /// `createXTemplate` hybrid methods are synchronous and never hop actors)
-    /// while the CarPlay delegate callbacks remove/purge them on the main
-    /// thread, and Swift dictionaries are not thread-safe.
+    /// while the CarPlay delegate callbacks remove/purge them on the main thread
     private let lock = NSLock()
     private var store: [String: AutoPlayTemplate] = [:]
 
@@ -36,9 +35,6 @@ class TemplateStore {
     }
 
     func removeTemplate(templateId: String) {
-        // Remove first, then notify outside the lock: `onPopped` runs a JS
-        // callback which can re-enter the store (see
-        // VoiceInputTemplate.onDidDisappear).
         let removed = withLock { store.removeValue(forKey: templateId) }
 
         removed?.onPopped()
@@ -53,8 +49,7 @@ class TemplateStore {
     }
 
     func purge() {
-        // These templates were popped by a native CarPlay button we cannot
-        // intercept, so they need an `onPopped()` just like an explicit pop.
+        /// These templates were popped by a native CarPlay button we cannot intercept, so they need an `onPopped()`
         let removed = withLock {
             let searchTemplates = store.filter {
                 $0.value.getTemplate() is CPSearchTemplate
@@ -75,12 +70,7 @@ class TemplateStore {
     }
 
     func disconnect() {
-        // The session is gone, so these templates will never be popped
-        // individually. Without an `onPopped()` here anything the app tied to a
-        // template's lifetime (event listeners, timers, cached render state)
-        // leaks for the rest of the app lifetime, and the host app keeps
-        // running after a disconnect. Android does the same on
-        // `Lifecycle.Event.ON_DESTROY` (AndroidAutoScreen.kt).
+        /// notify every visible template about it being gone
         let removed = withLock {
             let templates = Array(store.values)
             store = [:]
