@@ -4,9 +4,9 @@ import android.view.View
 import androidx.car.app.CarContext
 
 /**
- * An optional host-app-provided native View rendered under the React surface of the
- * Android Auto root display — the Android counterpart of the iOS `getRootViewForAutoplay`
- * AppDelegate hook. Lets a host compose a native map beneath its React overlay, e.g. a
+ * An optional host-app-provided native View rendered under the React surface of an
+ * Android Auto display (root or cluster) — the Android counterpart of the iOS
+ * `getRootViewForAutoplay` AppDelegate hook. Lets a host compose a native map beneath its React overlay, e.g. a
  * native map view that cannot be hosted as a React Native view on the virtual display
  * (Fragment-based map SDK wrappers are bound to the phone Activity).
  *
@@ -26,7 +26,15 @@ interface NativeBackdrop {
     fun destroy()
 }
 
+/** Which car display is asking for a backdrop. */
+enum class NativeBackdropDisplay { ROOT, CLUSTER }
+
 object NativeBackdropRegistry {
+    /**
+     * Consulted once per presentation for the root display AND for each cluster display.
+     * Return null to render that display without a backdrop (e.g. a host with a single
+     * native map view may serve the root only). A throwing factory is logged and ignored.
+     */
     @Volatile
-    var factory: ((CarContext) -> NativeBackdrop)? = null
+    var factory: ((CarContext, NativeBackdropDisplay) -> NativeBackdrop?)? = null
 }

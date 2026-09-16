@@ -413,18 +413,16 @@ class VirtualRenderer(
             }
 
 
-            // Ask the host for a native backdrop for the root display (clusters never get one).
-            // `this@VirtualRenderer.context` is the CarContext — the presentation's own `context`
-            // parameter is the ReactContext and shadows it. A throwing factory is logged and
-            // ignored so the React surface still renders.
-            val backdrop: NativeBackdrop? = if (!isCluster) {
-                NativeBackdropRegistry.factory?.let { factory ->
-                    runCatching { factory(this@VirtualRenderer.context) }
-                        .onFailure { Log.w(TAG, "native backdrop factory failed; rendering without it", it) }
-                        .getOrNull()
-                }
-            } else {
-                null
+            // Ask the host for a native backdrop for this display; the host is told whether it
+            // is the root or a cluster and may answer null for either. `this@VirtualRenderer.context`
+            // is the CarContext — the presentation's own `context` parameter is the ReactContext
+            // and shadows it. A throwing factory is logged and ignored so the React surface still
+            // renders.
+            val display = if (isCluster) NativeBackdropDisplay.CLUSTER else NativeBackdropDisplay.ROOT
+            val backdrop: NativeBackdrop? = NativeBackdropRegistry.factory?.let { factory ->
+                runCatching { factory(this@VirtualRenderer.context, display) }
+                    .onFailure { Log.w(TAG, "native backdrop factory failed ($display); rendering without it", it) }
+                    .getOrNull()
             }
             currentBackdrop?.let { pendingBackdrops.add(it) }
             currentBackdrop = backdrop
