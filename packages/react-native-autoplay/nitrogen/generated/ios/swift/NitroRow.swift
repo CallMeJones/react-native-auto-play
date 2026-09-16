@@ -18,7 +18,7 @@ public extension NitroRow {
   /**
    * Create a new instance of `NitroRow`.
    */
-  init(title: AutoText, detailedText: AutoText?, browsable: Bool?, enabled: Bool, image: Variant_GlyphImage_AssetImage_RemoteImage?, checked: Bool?, onPress: ((_ checked: Bool?) -> Void)?, selected: Bool?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Bool?, address: String?) {
+  init(title: AutoText, detailedText: AutoText?, browsable: Bool?, enabled: Bool, image: Variant_GlyphImage_AssetImage_RemoteImage?, imageType: ListImageType?, checked: Bool?, onPress: ((_ checked: Bool?) -> Void)?, selected: Bool?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Bool?, address: String?) {
     self.init(title, { () -> bridge.std__optional_AutoText_ in
       if let __unwrappedValue = detailedText {
         return bridge.create_std__optional_AutoText_(__unwrappedValue)
@@ -43,6 +43,12 @@ public extension NitroRow {
               return bridge.create_std__variant_GlyphImage__AssetImage__RemoteImage_(__value)
           }
         }().variant)
+      } else {
+        return .init()
+      }
+    }(), { () -> bridge.std__optional_ListImageType_ in
+      if let __unwrappedValue = imageType {
+        return bridge.create_std__optional_ListImageType_(__unwrappedValue)
       } else {
         return .init()
       }
@@ -152,6 +158,11 @@ public extension NitroRow {
         return nil
       }
     }()
+  }
+  
+  @inline(__always)
+  var imageType: ListImageType? {
+    return self.__imageType.value
   }
   
   @inline(__always)

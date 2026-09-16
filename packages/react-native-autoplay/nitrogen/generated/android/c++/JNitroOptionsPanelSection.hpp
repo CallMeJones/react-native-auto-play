@@ -35,6 +35,8 @@
 #include "JNitroColor.hpp"
 #include "JAssetImage.hpp"
 #include "JRemoteImage.hpp"
+#include "ListImageType.hpp"
+#include "JListImageType.hpp"
 #include <functional>
 #include "JFunc_void_std__optional_bool_.hpp"
 #include <NitroModules/JNICallable.hpp>

@@ -1,3 +1,4 @@
+import type { ListImageType } from '../templates/ListTemplate';
 import type { AutoImage } from '../types/Image';
 import { type AutoText, type Distance, TextPlaceholders } from '../types/Text';
 import type { DurationWithTimeZone } from '../types/Trip';
@@ -7,6 +8,8 @@ type BaseRow = {
   title: AutoText;
   enabled?: boolean;
   image?: AutoImage;
+  /** @namespace Android */
+  imageType?: ListImageType;
 };
 
 export type DefaultRow<T> = BaseRow & {
@@ -95,6 +98,7 @@ export type NitroRow = {
   browsable?: boolean;
   enabled: boolean;
   image?: NitroImage;
+  imageType?: ListImageType;
   checked?: boolean;
   onPress?: (checked?: boolean) => void;
   selected?: boolean;
@@ -186,7 +190,7 @@ const convertRow = <T>(
   template: T,
   item: DefaultRow<T> | RadioRow<T> | ToggleRow<T> | TextRow | WaypointRow<T>
 ): NitroRow => {
-  const { type, enabled = true, image } = item;
+  const { type, enabled = true, image, imageType } = item;
 
   // `WaypointRow` has no `detailedText` of its own — `address` doubles as the detail line
   // whenever this falls back to a plain row (non-panel context, Android).
@@ -238,6 +242,7 @@ const convertRow = <T>(
     detailedText,
     enabled,
     image: NitroImageUtil.convert(image),
+    imageType,
     title,
     checked: type === 'toggle' ? item.checked : undefined,
     onPress,

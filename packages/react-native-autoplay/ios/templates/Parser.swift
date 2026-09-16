@@ -414,6 +414,7 @@ class Parser {
                     browsable: row.browsable,
                     enabled: row.enabled,
                     image: row.image,
+                    imageType: row.imageType,
                     checked: checked,
                     onPress: row.onPress,
                     selected: selected,

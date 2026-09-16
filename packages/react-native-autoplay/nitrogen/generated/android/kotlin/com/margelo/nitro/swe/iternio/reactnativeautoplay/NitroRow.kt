@@ -35,6 +35,9 @@ data class NitroRow(
   val image: Variant_GlyphImage_AssetImage_RemoteImage?,
   @DoNotStrip
   @Keep
+  val imageType: ListImageType?,
+  @DoNotStrip
+  @Keep
   val checked: Boolean?,
   @DoNotStrip
   @Keep
@@ -61,8 +64,8 @@ data class NitroRow(
   /**
    * Create a new instance of NitroRow from Kotlin
    */
-  constructor(title: AutoText, detailedText: AutoText?, browsable: Boolean?, enabled: Boolean, image: Variant_GlyphImage_AssetImage_RemoteImage?, checked: Boolean?, onPress: ((checked: Boolean?) -> Unit)?, selected: Boolean?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Boolean?, address: String?):
-         this(title, detailedText, browsable, enabled, image, checked, onPress?.let { Func_void_std__optional_bool__java(it) }, selected, coordinate, distance, duration, travelEstimatesVisible, address)
+  constructor(title: AutoText, detailedText: AutoText?, browsable: Boolean?, enabled: Boolean, image: Variant_GlyphImage_AssetImage_RemoteImage?, imageType: ListImageType?, checked: Boolean?, onPress: ((checked: Boolean?) -> Unit)?, selected: Boolean?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Boolean?, address: String?):
+         this(title, detailedText, browsable, enabled, image, imageType, checked, onPress?.let { Func_void_std__optional_bool__java(it) }, selected, coordinate, distance, duration, travelEstimatesVisible, address)
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -72,6 +75,7 @@ data class NitroRow(
       && Objects.deepEquals(this.browsable, other.browsable)
       && Objects.deepEquals(this.enabled, other.enabled)
       && Objects.deepEquals(this.image, other.image)
+      && Objects.deepEquals(this.imageType, other.imageType)
       && Objects.deepEquals(this.checked, other.checked)
       && Objects.deepEquals(this.onPress, other.onPress)
       && Objects.deepEquals(this.selected, other.selected)
@@ -89,6 +93,7 @@ data class NitroRow(
       browsable,
       enabled,
       image,
+      imageType,
       checked,
       onPress,
       selected,
@@ -108,8 +113,8 @@ data class NitroRow(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(title: AutoText, detailedText: AutoText?, browsable: Boolean?, enabled: Boolean, image: Variant_GlyphImage_AssetImage_RemoteImage?, checked: Boolean?, onPress: Func_void_std__optional_bool_?, selected: Boolean?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Boolean?, address: String?): NitroRow {
-      return NitroRow(title, detailedText, browsable, enabled, image, checked, onPress, selected, coordinate, distance, duration, travelEstimatesVisible, address)
+    private fun fromCpp(title: AutoText, detailedText: AutoText?, browsable: Boolean?, enabled: Boolean, image: Variant_GlyphImage_AssetImage_RemoteImage?, imageType: ListImageType?, checked: Boolean?, onPress: Func_void_std__optional_bool_?, selected: Boolean?, coordinate: WaypointCoordinate?, distance: Distance?, duration: DurationWithTimeZone?, travelEstimatesVisible: Boolean?, address: String?): NitroRow {
+      return NitroRow(title, detailedText, browsable, enabled, image, imageType, checked, onPress, selected, coordinate, distance, duration, travelEstimatesVisible, address)
     }
   }
 }

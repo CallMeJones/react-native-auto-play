@@ -15,6 +15,12 @@ import {
 
 const HybridListTemplate = NitroModules.createHybridObject<NitroListTemplate>('ListTemplate');
 
+/**
+ * Controls the Android image size for a list item.
+ * @namespace Android
+ */
+export type ListImageType = 'large' | 'medium' | 'small' | 'extra_small' | 'icon';
+
 export type {
   DefaultRow,
   MultiSection,

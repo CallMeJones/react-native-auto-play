@@ -34,6 +34,8 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class EventNa
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ForkType; }
 // Forward declaration of `GlyphImage` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct GlyphImage; }
+// Forward declaration of `GridImageSize` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class GridImageSize; }
 // Forward declaration of `GridTemplateConfig` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct GridTemplateConfig; }
 // Forward declaration of `HybridAutoPlaySpec` to properly resolve imports.
@@ -64,6 +66,8 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct Information
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class KeepType; }
 // Forward declaration of `LaneGuidance` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct LaneGuidance; }
+// Forward declaration of `ListImageType` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ListImageType; }
 // Forward declaration of `ListTemplateConfig` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct ListTemplateConfig; }
 // Forward declaration of `Location` to properly resolve imports.
@@ -187,6 +191,7 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ZoomEve
 #include "EventName.hpp"
 #include "ForkType.hpp"
 #include "GlyphImage.hpp"
+#include "GridImageSize.hpp"
 #include "GridTemplateConfig.hpp"
 #include "HybridAutoPlaySpec.hpp"
 #include "HybridCarPlayDashboardSpec.hpp"
@@ -202,6 +207,7 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ZoomEve
 #include "InformationTemplateConfig.hpp"
 #include "KeepType.hpp"
 #include "LaneGuidance.hpp"
+#include "ListImageType.hpp"
 #include "ListTemplateConfig.hpp"
 #include "Location.hpp"
 #include "ManeuverState.hpp"

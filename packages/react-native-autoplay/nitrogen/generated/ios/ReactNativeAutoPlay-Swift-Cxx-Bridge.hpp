@@ -32,6 +32,8 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct DurationWit
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ForkType; }
 // Forward declaration of `GlyphImage` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct GlyphImage; }
+// Forward declaration of `GridImageSize` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class GridImageSize; }
 // Forward declaration of `HybridAutoPlaySpec` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { class HybridAutoPlaySpec; }
 // Forward declaration of `HybridCarPlayDashboardSpec` to properly resolve imports.
@@ -58,6 +60,8 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct ImageLane; 
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class KeepType; }
 // Forward declaration of `LaneGuidance` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct LaneGuidance; }
+// Forward declaration of `ListImageType` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { enum class ListImageType; }
 // Forward declaration of `Location` to properly resolve imports.
 namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct Location; }
 // Forward declaration of `ManeuverType` to properly resolve imports.
@@ -185,6 +189,7 @@ namespace ReactNativeAutoPlay { class HybridVoiceSpec_cxx; }
 #include "DurationWithTimeZone.hpp"
 #include "ForkType.hpp"
 #include "GlyphImage.hpp"
+#include "GridImageSize.hpp"
 #include "HybridAutoPlaySpec.hpp"
 #include "HybridCarPlayDashboardSpec.hpp"
 #include "HybridClusterSpec.hpp"
@@ -198,6 +203,7 @@ namespace ReactNativeAutoPlay { class HybridVoiceSpec_cxx; }
 #include "ImageLane.hpp"
 #include "KeepType.hpp"
 #include "LaneGuidance.hpp"
+#include "ListImageType.hpp"
 #include "Location.hpp"
 #include "ManeuverType.hpp"
 #include "NavigationAlertAction.hpp"
@@ -885,6 +891,21 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay::bridge::swift {
     return vector;
   }
   
+  // pragma MARK: std::optional<GridImageSize>
+  /**
+   * Specialized version of `std::optional<GridImageSize>`.
+   */
+  using std__optional_GridImageSize_ = std::optional<GridImageSize>;
+  inline std::optional<GridImageSize> create_std__optional_GridImageSize_(const GridImageSize& value) noexcept {
+    return std::optional<GridImageSize>(value);
+  }
+  inline bool has_value_std__optional_GridImageSize_(const std::optional<GridImageSize>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline GridImageSize get_std__optional_GridImageSize_(const std::optional<GridImageSize>& optional) noexcept {
+    return optional.value();
+  }
+  
   // pragma MARK: std::vector<NitroMapButton>
   /**
    * Specialized version of `std::vector<NitroMapButton>`.
@@ -987,6 +1008,21 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay::bridge::swift {
     return optional.has_value();
   }
   inline AutoText get_std__optional_AutoText_(const std::optional<AutoText>& optional) noexcept {
+    return optional.value();
+  }
+  
+  // pragma MARK: std::optional<ListImageType>
+  /**
+   * Specialized version of `std::optional<ListImageType>`.
+   */
+  using std__optional_ListImageType_ = std::optional<ListImageType>;
+  inline std::optional<ListImageType> create_std__optional_ListImageType_(const ListImageType& value) noexcept {
+    return std::optional<ListImageType>(value);
+  }
+  inline bool has_value_std__optional_ListImageType_(const std::optional<ListImageType>& optional) noexcept {
+    return optional.has_value();
+  }
+  inline ListImageType get_std__optional_ListImageType_(const std::optional<ListImageType>& optional) noexcept {
     return optional.value();
   }
   
