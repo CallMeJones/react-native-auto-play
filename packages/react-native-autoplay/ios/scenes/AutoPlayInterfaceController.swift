@@ -173,6 +173,10 @@ class AutoPlayInterfaceController: NSObject, CPInterfaceControllerDelegate {
 
             try await mapTemplate.popPanel()
 
+            // popPanel() never triggers panelDidHide (only hidePanel() does), so this has to
+            // do the teardown + reveal itself rather than rely on the delegate.
+            await handlePanelPopped(templateId: templateId, animated: animated)
+
             return templateId
         }
     }

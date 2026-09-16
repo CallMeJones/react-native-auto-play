@@ -73,7 +73,6 @@ class AutoPlayMapPanelDelegate: NSObject, CPMapPanel.Delegate {
     /// https://developer.apple.com/documentation/ios-ipados-release-notes/ios-ipados-27-release-notes#CarPlay
     func panelDidHide(_ panel: CPMapPanel) {
         let templateId = self.templateId
-        let template = self.template
 
         Task { @MainActor in
             var stillTracked = false
@@ -85,47 +84,57 @@ class AutoPlayMapPanelDelegate: NSObject, CPMapPanel.Delegate {
             // Already torn down elsewhere, e.g. by popToRootTemplate for a covered panel.
             guard stillTracked else { return }
 
-            var revealedPanelId: String?
-            var mapTemplate: CPMapTemplate?
+            await handlePanelPopped(templateId: templateId, animated: true)
+        }
+    }
+}
 
-            // Read panelTemplateIds after removing this entry, in the same MainActor-isolated
-            // closure, so there's no race between the removal and the check for what's now on
-            // top.
-            try? await RootModule.withInterfaceController { interfaceController in
-                interfaceController.removeNavigationEntryIfPresent(templateId: templateId)
-                revealedPanelId = interfaceController.panelTemplateIds.last
-                mapTemplate = interfaceController.rootTemplate as? CPMapTemplate
+/// Tears down `templateId`'s panel and reveals whatever's now on top (or lets the map template
+/// reclaim its own bar/map buttons if nothing remains). Shared by `panelDidHide` — which only
+/// fires for a `hidePanel()`-triggered close — and `popTopEntry`'s `.panel` case, since
+/// `popPanel()` never triggers `panelDidHide` and so has to run this itself.
+@available(iOS 27.0, *)
+@MainActor
+func handlePanelPopped(templateId: String, animated: Bool) async {
+    var revealedPanelId: String?
+    var mapTemplate: CPMapTemplate?
+
+    try? await RootModule.withInterfaceController { interfaceController in
+        interfaceController.removeNavigationEntryIfPresent(templateId: templateId)
+        revealedPanelId = interfaceController.panelTemplateIds.last
+        mapTemplate = interfaceController.rootTemplate as? CPMapTemplate
+    }
+
+    try? RootModule.withAutoPlayTemplate(templateId: templateId) {
+        (template: AutoPlayTemplate) in
+        template.onWillDisappear(animated: animated)
+        template.onDidDisappear(animated: animated)
+    }
+
+    try? RootModule.withTemplateStore { templateStore in
+        templateStore.removeTemplate(templateId: templateId)
+    }
+
+    HybridAutoPlay.removeListeners(templateId: templateId)
+
+    if let revealedPanelId {
+        // Another panel is now on top: it reclaims the bar/map buttons and its own appear pair, same as a fresh push.
+        try? RootModule.withAutoPlayTemplate(templateId: revealedPanelId) {
+            (revealed: AutoPlayTemplate) in
+            if let mapTemplate {
+                applyPanelHeaderActions(revealed.getPanelHeaderActions(), to: mapTemplate)
+                applyPanelMapButtons(revealed.getPanelMapButtons(), to: mapTemplate)
             }
-
-            template?.onWillDisappear(animated: true)
-            template?.onDidDisappear(animated: true)
-
-            try? RootModule.withTemplateStore { templateStore in
-                templateStore.removeTemplate(templateId: templateId)
-            }
-
-            HybridAutoPlay.removeListeners(templateId: templateId)
-
-            if let revealedPanelId {
-                // Another panel is now on top: it reclaims the bar/map buttons and its own appear pair, same as a fresh push.
-                try? RootModule.withAutoPlayTemplate(templateId: revealedPanelId) {
-                    (revealed: AutoPlayTemplate) in
-                    if let mapTemplate {
-                        applyPanelHeaderActions(revealed.getPanelHeaderActions(), to: mapTemplate)
-                        applyPanelMapButtons(revealed.getPanelMapButtons(), to: mapTemplate)
-                    }
-                    // let the now uncovered panel know it appeared again
-                    revealed.onWillAppear(animated: true)
-                    revealed.onDidAppear(animated: true)
-                }
-            }
-            else if let mapTemplate {
-                // No panel remains: let the map template reclaim its own bar/map buttons.
-                try? RootModule.withAutoPlayTemplate(templateId: mapTemplate.id) {
-                    (root: AutoPlayTemplate) in
-                    root.invalidate()
-                }
-            }
+            // let the now uncovered panel know it appeared again
+            revealed.onWillAppear(animated: animated)
+            revealed.onDidAppear(animated: animated)
+        }
+    }
+    else if let mapTemplate {
+        // No panel remains: let the map template reclaim its own bar/map buttons.
+        try? RootModule.withAutoPlayTemplate(templateId: mapTemplate.id) {
+            (root: AutoPlayTemplate) in
+            root.invalidate()
         }
     }
 }
