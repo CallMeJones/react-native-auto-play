@@ -197,25 +197,26 @@ class AutoPlayInterfaceController: NSObject, CPInterfaceControllerDelegate {
             return nil
         })
 
-        if !panelTemplates.isEmpty, #available(iOS 27.0, *) {
-            for templateId in panelTemplates {
-                try? RootModule.withAutoPlayTemplate(templateId: templateId) {
-                    (template: AutoPlayTemplate) in
-                    template.onWillDisappear(animated: animated)
-                }
-            }
+        // The visible panel is left for panelDidHide to tear down (via hidePanel() below) so its
+        // lifecycle + button reclaim isn't duplicated here; only the already-covered ones (which
+        // already got their disappear pair) need removing now.
+        let visiblePanelId = panelTemplates.last
+        let idsToRemoveNow = poppedIds.filter { $0 != visiblePanelId }
 
+        try RootModule.withTemplateStore { templateStore in
+            templateStore.removeTemplates(templateIds: idsToRemoveNow)
+        }
+
+        // Keep the visible panel tracked so panelDidHide still finds it there.
+        let keptEntry = visiblePanelId.flatMap { id in entriesToPop.first { $0.id == id } }
+        navigationStack = [navigationStack[0]] + (keptEntry.map { [$0] } ?? [])
+
+        if visiblePanelId != nil, #available(iOS 27.0, *) {
             try await RootModule.withInterfaceController { interfaceController in
                 let mapTemplate = interfaceController.rootTemplate as? CPMapTemplate
                 try await mapTemplate?.hidePanel()
             }
         }
-
-        try RootModule.withTemplateStore { templateStore in
-            templateStore.removeTemplates(templateIds: poppedIds)
-        }
-
-        navigationStack = Array(navigationStack.prefix(1))
 
         return poppedIds
     }

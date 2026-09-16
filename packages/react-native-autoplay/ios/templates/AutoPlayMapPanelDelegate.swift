@@ -76,6 +76,15 @@ class AutoPlayMapPanelDelegate: NSObject, CPMapPanel.Delegate {
         let template = self.template
 
         Task { @MainActor in
+            var stillTracked = false
+
+            try? await RootModule.withInterfaceController { interfaceController in
+                stillTracked = interfaceController.panelTemplateIds.contains(templateId)
+            }
+
+            // Already torn down elsewhere, e.g. by popToRootTemplate for a covered panel.
+            guard stillTracked else { return }
+
             var revealedPanelId: String?
             var mapTemplate: CPMapTemplate?
 

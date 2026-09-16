@@ -212,11 +212,11 @@ const getTemplate = (props?: { mapConfig?: ListTemplateConfig['mapConfig'] }): L
     mapConfig: props?.mapConfig,
     headerActions: AutoTemplate.headerActions,
     sections: getMainSection(),
-    onDidAppear: () => console.log('ListTemplate onDidAppear'),
-    onDidDisappear: () => console.log('ListTemplate onDidDisappear'),
-    onWillAppear: () => console.log('ListTemplate onWillAppear'),
-    onWillDisappear: () => console.log('ListTemplate onWillDisappear'),
-    onPopped: () => console.log('ListTemplate onPopped'),
+    onDidAppear: () => console.log('ListTemplate onDidAppear', template.id),
+    onDidDisappear: () => console.log('ListTemplate onDidDisappear', template.id),
+    onWillAppear: () => console.log('ListTemplate onWillAppear', template.id),
+    onWillDisappear: () => console.log('ListTemplate onWillDisappear', template.id),
+    onPopped: () => console.log('ListTemplate onPopped', template.id),
   });
 
   return template;
