@@ -467,7 +467,7 @@ class VirtualRenderer(
                         }
                         pendingDisplays.clear()
                         // Backdrops share the lifetime of the displays they drew on
-                        pendingBackdrops.forEach { it.destroy() }
+                        pendingBackdrops.forEach { destroyBackdropQuietly(it, "parked") }
                         pendingBackdrops.clear()
                     }
                 }
@@ -544,13 +544,20 @@ class VirtualRenderer(
         }
     }
 
+    /** Host code, same trust boundary as the factory: log and continue on failure. */
+    private fun destroyBackdropQuietly(backdrop: NativeBackdrop, which: String) {
+        runCatching { backdrop.destroy() }
+            .onFailure { Log.w(TAG, "native backdrop ($which) destroy failed; continuing teardown", it) }
+    }
+
     @MainThread
     private fun stop() {
         // Current and parked — a stop during a resize must not leak the backdrop whose
-        // replacement never drew
-        currentBackdrop?.destroy()
+        // replacement never drew. Host destroy() is guarded like the factory call: a
+        // throwing host must not skip the virtual-display release and surface teardown below.
+        currentBackdrop?.let { destroyBackdropQuietly(it, "current") }
         currentBackdrop = null
-        pendingBackdrops.forEach { it.destroy() }
+        pendingBackdrops.forEach { destroyBackdropQuietly(it, "parked") }
         pendingBackdrops.clear()
 
         virtualDisplay?.release()
