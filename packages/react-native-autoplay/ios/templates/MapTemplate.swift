@@ -134,6 +134,10 @@ class MapTemplate: AutoPlayHeaderProviding,
         }()
 
         if !hasPanel {
+            // Restore CarPlay's default auto-hide (disabled while a panel is shown, see panelDidShow).
+            template.automaticallyHidesNavigationBar = true
+            template.hidesButtonsWithNavigationBar = true
+
             setBarButtons(template: template, barButtons: barButtons)
 
             if let mapButtons = mapButtons {

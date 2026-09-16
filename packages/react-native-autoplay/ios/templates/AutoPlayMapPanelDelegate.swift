@@ -51,6 +51,10 @@ class AutoPlayMapPanelDelegate: NSObject, CPMapPanel.Delegate {
 
             // This panel owns the map template's bar buttons and map buttons while it's on top.
             if let mapTemplate {
+                // Auto-hiding the bar shifts the panel and interrupts taps on it.
+                mapTemplate.automaticallyHidesNavigationBar = false
+                mapTemplate.hidesButtonsWithNavigationBar = false
+
                 applyPanelHeaderActions(self.template?.getPanelHeaderActions(), to: mapTemplate)
                 applyPanelMapButtons(self.template?.getPanelMapButtons(), to: mapTemplate)
             }
