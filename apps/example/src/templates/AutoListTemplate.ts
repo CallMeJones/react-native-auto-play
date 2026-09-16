@@ -138,6 +138,10 @@ const getTemplate = (props?: { mapConfig?: ListTemplateConfig['mapConfig'] }): L
     mapConfig: props?.mapConfig,
     headerActions: AutoTemplate.headerActions,
     sections: getMainSection(),
+    onDidAppear: () => console.log('ListTemplate onDidAppear'),
+    onDidDisappear: () => console.log('ListTemplate onDidDisappear'),
+    onWillAppear: () => console.log('ListTemplate onWillAppear'),
+    onWillDisappear: () => console.log('ListTemplate onWillDisappear'),
     onPopped: () => console.log('ListTemplate onPopped'),
   });
 };

@@ -137,37 +137,36 @@ Paste this into your Info.plist and adjust it to your needs. Check [Apple docs](
 
 #### MapTemplate
 if you want to make use of the MapTemplate and render react components you need to add this to your AppDelegate.swift
-This should cover old and new architecture, adjust to your needs!
+This is an example that works for bare react-native (>= 0.82) and Expo SDK 57, check [this](https://github.com/Iternio-Planning-AB/react-native-auto-play/blob/dbd33ff32ee58338282ffe0f8a970e687e1e3520/packages/react-native-autoplay/README.md?plain=1#L139) for older versions.
 
 ```swift
-@objc func getRootViewForAutoplay(
+  @objc func getRootViewForAutoplay(
     moduleName: String,
     initialProperties: [String: Any]?
   ) -> UIView? {
-    if RCTIsNewArchEnabled() {
-      if let factory = reactNativeFactory?.rootViewFactory as? ExpoReactRootViewFactory {
-         return factory.superView(
-          withModuleName: moduleName,
-          initialProperties: initialProperties,
-          launchOptions: nil
-        )
-      }
-      
-      return reactNativeFactory?.rootViewFactory.view(
+    var autoPlayRootView: UIView?
+
+    if let factory = reactNativeFactory?.rootViewFactory
+      as? ExpoReactRootViewFactory
+    {
+      autoPlayRootView = factory.superView(
+        withModuleName: moduleName,
+        initialProperties: initialProperties,
+        bundleConfiguration: RCTBundleConfiguration(),
+        devMenuConfiguration: RCTDevMenuConfiguration(),
+      )
+    }
+
+    if autoPlayRootView == nil,
+      let factory = reactNativeFactory?.rootViewFactory
+    {
+      autoPlayRootView = factory.view(
         withModuleName: moduleName,
         initialProperties: initialProperties
       )
     }
 
-    if let rootView = window?.rootViewController?.view as? RCTRootView {
-      return RCTRootView(
-        bridge: rootView.bridge,
-        moduleName: moduleName,
-        initialProperties: initialProperties
-      )
-    }
-
-    return nil
+    return autoPlayRootView
   }
 ```
 
