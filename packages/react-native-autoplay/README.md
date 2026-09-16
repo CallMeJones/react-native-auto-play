@@ -202,6 +202,49 @@ In case you have ProGuard enabled (`def enableProguardInReleaseBuilds = true` in
 -keep class com.margelo.nitro.swe.iternio.reactnativeautoplay.** { *; }
 ```
 
+#### Native backdrop under the MapTemplate surface
+On Android the React content of a `MapTemplate` is rendered onto the car screen through a virtual display. Some native views cannot be hosted there as React Native views — Fragment-based map SDK wrappers, for example, are bound to the phone `Activity`. For those the library can place a host-provided native `View` **under** the React surface of a display: the Android counterpart of the iOS `getRootViewForAutoplay` hook above. Your React tree then draws on top of it as an overlay. The factory is asked for the root display and for each cluster display, and may answer `null` for either.
+
+```kotlin
+interface NativeBackdrop {
+    /** Added as the presentation root's FIRST child, match-parent. */
+    val view: View
+
+    /** The car's day/night changed (CarContext.isDarkMode) — redraw accordingly. */
+    fun onColorSchemeChanged(dark: Boolean)
+
+    /** Release everything; must be idempotent. */
+    fun destroy()
+}
+
+/** Which car display is asking for a backdrop. */
+enum class NativeBackdropDisplay { ROOT, CLUSTER }
+
+object NativeBackdropRegistry {
+    /** Return null to render that display without a backdrop. */
+    @Volatile
+    var factory: ((CarContext, NativeBackdropDisplay) -> NativeBackdrop?)? = null
+}
+```
+
+Register the factory in your `Application.onCreate`, before the `CarAppService` can start:
+
+```kotlin
+NativeBackdropRegistry.factory = { carContext, display ->
+    when (display) {
+        NativeBackdropDisplay.ROOT -> MyMapBackdrop(carContext)
+        NativeBackdropDisplay.CLUSTER -> null   // or a second map view for the cluster
+    }
+}
+```
+
+Lifecycle contract:
+
+-   The factory is consulted once per presentation of each display — i.e. again after every surface resize — and each backdrop is destroyed when its presentation is replaced or the renderer stops. A `destroy()` that throws is logged and does not interrupt teardown.
+-   A factory that throws is logged and ignored; the React surface still renders.
+-   The React surface view is transparent only while a backdrop is attached. Without a registered factory nothing changes: the surface stays opaque as before.
+-   `onColorSchemeChanged(dark)` is forwarded from each session's `onCarConfigurationChanged` to that display's backdrop, so it can follow the car's day/night setting (car app quality guideline MR-1). It fires regardless of which template is currently on screen.
+
 ### Android Auto Customization
 You can customize certain behaviors of the library on Android Auto by setting properties in your app's `android/gradle.properties` file.
 
