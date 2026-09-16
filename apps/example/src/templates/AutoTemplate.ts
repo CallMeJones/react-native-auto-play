@@ -520,31 +520,39 @@ const mapButtons: MapTemplateConfig['mapButtons'] = [
           // simple debouncing to not send too many requests to backend
           clearTimeout(timeout);
           timeout = setTimeout(() => {
-            template.updateSearchResults(
-              searchText
-                ? {
-                    items: [
-                      {
-                        title: { text: searchText },
-                        detailedText: { text: 'onSearchTextChanged' },
-                        type: 'default',
-                        onPress: () => {
-                          console.log('*** onPress', searchText);
-                          HybridAutoPlay.popToRootTemplate(true).catch((error) => {
-                            console.error('*** error', error);
-                          });
+            template
+              .updateSearchResults(
+                searchText
+                  ? {
+                      items: [
+                        {
+                          title: { text: searchText },
+                          detailedText: { text: 'onSearchTextChanged' },
+                          type: 'default',
+                          onPress: () => {
+                            console.log('*** onPress', searchText);
+                            HybridAutoPlay.popToRootTemplate(true).catch((error) => {
+                              console.error('*** error', error);
+                            });
+                          },
+                          image: {
+                            name: 'ev_charger',
+                            color: { lightColor: 'red', darkColor: 'orange' },
+                            type: 'glyph',
+                          },
                         },
-                        image: {
-                          name: 'ev_charger',
-                          color: { lightColor: 'red', darkColor: 'orange' },
-                          type: 'glyph',
-                        },
-                      },
-                    ],
-                    type: 'default',
-                  }
-                : undefined
-            );
+                      ],
+                      type: 'default',
+                    }
+                  : undefined
+              )
+              .catch((e) => {
+                if (ErrorUtil.isTemplateNotFoundError(e)) {
+                  // template not found errors can be ignored since it might be popped by the user before the updateSearchResults is invoked
+                  return;
+                }
+                console.error(e);
+              });
           }, 1000);
         },
         onSearchTextSubmitted: (searchText) => {

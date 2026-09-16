@@ -218,6 +218,8 @@ const getTemplate = (props?: { mapConfig?: ListTemplateConfig['mapConfig'] }): L
     onWillDisappear: () => console.log('ListTemplate onWillDisappear'),
     onPopped: () => console.log('ListTemplate onPopped'),
   });
+
+  return template;
 };
 
 export const AutoListTemplate = { getTemplate };
