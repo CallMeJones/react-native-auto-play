@@ -193,6 +193,10 @@ class HybridAutoPlay: HybridAutoPlaySpec {
                 await template.invalidate()
 
                 if #available(iOS 27.0, *), let panel = template.getPanel() as? CPMapPanel {
+                    /// since only the top most panel gets a panelDidHide call when pressing the close button
+                    /// we hide it globaly to avoid orphaned panels on the navigation stack
+                    panel.showsCloseButton = false
+                    
                     try await interfaceController.pushPanel(
                         panel,
                         templateId: templateId
