@@ -287,11 +287,8 @@ class Parser {
             )
         }
 
-        /// iOS 27 beta 3 & 4  do not accept nil for the optional travelEstimates any longer while the function comment still claims it is optional
-        /// Initializes a map panel button configuration with a primary action, optional travel estimates, and an optional secondary button.
-        ///
-        /// set it and call setValue to nil it again oO
-        /// TODO: recheck on RC/final release
+        /// according to the docs travelEstimates is optional, the intializer just does not know it....
+        /// set it and nil it on next line....
         let buttonConfiguration = CPMapPanelButtonConfiguration(
             primaryAction: primaryButton,
             secondaryButton: symbolButton,
@@ -300,8 +297,7 @@ class Parser {
                 timeRemaining: 0
             )
         )
-
-        buttonConfiguration.setValue(nil, forKey: "travelEstimates")
+        buttonConfiguration.travelEstimates = nil
 
         return buttonConfiguration
     }
@@ -649,9 +645,8 @@ class Parser {
         if let glyphImage = image?.glyphImage {
             return SymbolFont.imageFromNitroImage(
                 image: glyphImage,
-                // iOS 27 beta 4 makes the image overflow
+                // iOS 27 makes the image overflow
                 // adjusting it with displayScale gives it the proper size but causes some blur
-                // TODO: check again on next release
                 size: CPNavigationAlert.maximumAvatarImageSize.width / traitCollection.displayScale,
                 traitCollection: traitCollection
             )

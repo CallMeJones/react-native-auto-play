@@ -105,8 +105,6 @@ class AutoPlayInterfaceController: NSObject, CPInterfaceControllerDelegate {
             animated: animated
         )
 
-        // TODO: check if we need to hide any panels or if setRootTemplate handles this
-
         navigationStack = [.template(id: rootTemplate.id)]
 
         return result
@@ -210,15 +208,6 @@ class AutoPlayInterfaceController: NSObject, CPInterfaceControllerDelegate {
             try await RootModule.withInterfaceController { interfaceController in
                 let mapTemplate = interfaceController.rootTemplate as? CPMapTemplate
                 try await mapTemplate?.hidePanel()
-            }
-
-            for entry in entriesToPop {
-                // mapTemplate?.hidePanel() does not invoke panelDidHide on AutoPlayMapPanelDelegate so we need to do this manually here, TODO: check on later releases if this is fixed
-                guard case .panel(let templateId, _) = entry else { continue }
-                try? RootModule.withAutoPlayTemplate(templateId: templateId) {
-                    (template: AutoPlayTemplate) in
-                    template.onDidDisappear(animated: animated)
-                }
             }
         }
 

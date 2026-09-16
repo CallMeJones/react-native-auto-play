@@ -386,7 +386,6 @@ class MapTemplate: AutoPlayHeaderProviding,
         )
 
         if #available(iOS 27.0, *) {
-            // as of iOS 27 beta 4 this does not work when setting an image on the alert
             alert.showsCloseButton = false
         }
 
