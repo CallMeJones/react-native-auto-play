@@ -732,7 +732,7 @@ class Parser {
     /// values above 1000 kW are shown in megawatts instead, since nobody wants to read "1500 kW" on a charger card.
     private static func parsePower(kilowatts: Double) -> Measurement<UnitPower> {
         let measurement = Measurement(value: kilowatts, unit: UnitPower.kilowatts)
-        return kilowatts > 1000 ? measurement.converted(to: .megawatts) : measurement
+        return kilowatts >= 1000 ? measurement.converted(to: .megawatts) : measurement
     }
 
     /// `onPanButtonPress` is called instead of `button.onPress` for `.pan`-typed buttons, since panning belongs to the `CPMapTemplate`, not the button.

@@ -87,16 +87,11 @@ class ListTemplate: AutoPlayHeaderProviding {
         }
 
         if #available(iOS 27.0, *), let mapPanel = mapPanel as? CPMapPanel {
-            let panelSections = Parser.parseMapPanelSections(
+            mapPanel.sections = Parser.parseMapPanelSections(
                 sections: sections,
                 updateSection: self.updateSection(section:sectionIndex:),
                 traitCollection: traitCollection
             )
-
-            zip(mapPanel.sections, panelSections).forEach { existingSection, updatedSection in
-                existingSection.title = updatedSection.title
-                existingSection.items = updatedSection.items
-            }
 
             return
         }
