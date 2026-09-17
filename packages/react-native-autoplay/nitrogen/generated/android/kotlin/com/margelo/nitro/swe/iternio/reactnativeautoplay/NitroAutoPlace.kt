@@ -32,7 +32,10 @@ data class NitroAutoPlace(
   val markerColorLight: Double?,
   @DoNotStrip
   @Keep
-  val markerColorDark: Double?
+  val markerColorDark: Double?,
+  @DoNotStrip
+  @Keep
+  val markerImage: Variant_GlyphImage_AssetImage_RemoteImage?
 ) {
   /* primary constructor */
 
@@ -44,6 +47,7 @@ data class NitroAutoPlace(
       && Objects.deepEquals(this.markerLabel, other.markerLabel)
       && Objects.deepEquals(this.markerColorLight, other.markerColorLight)
       && Objects.deepEquals(this.markerColorDark, other.markerColorDark)
+      && Objects.deepEquals(this.markerImage, other.markerImage)
   }
 
   override fun hashCode(): Int {
@@ -52,7 +56,8 @@ data class NitroAutoPlace(
       longitude,
       markerLabel,
       markerColorLight,
-      markerColorDark
+      markerColorDark,
+      markerImage
     ).contentDeepHashCode()
   }
 
@@ -64,8 +69,8 @@ data class NitroAutoPlace(
     @Keep
     @Suppress("unused")
     @JvmStatic
-    private fun fromCpp(latitude: Double, longitude: Double, markerLabel: String?, markerColorLight: Double?, markerColorDark: Double?): NitroAutoPlace {
-      return NitroAutoPlace(latitude, longitude, markerLabel, markerColorLight, markerColorDark)
+    private fun fromCpp(latitude: Double, longitude: Double, markerLabel: String?, markerColorLight: Double?, markerColorDark: Double?, markerImage: Variant_GlyphImage_AssetImage_RemoteImage?): NitroAutoPlace {
+      return NitroAutoPlace(latitude, longitude, markerLabel, markerColorLight, markerColorDark, markerImage)
     }
   }
 }

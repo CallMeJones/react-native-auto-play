@@ -4,7 +4,8 @@ import type { AutoText } from '../types/Text';
 import type { ThemedColor } from '../utils/NitroColor';
 import { NitroColorUtil } from '../utils/NitroColor';
 import { type NitroAction, NitroActionUtil } from '../utils/NitroAction';
-import type { NitroImage } from '../utils/NitroImage';
+import type { AutoImage } from '../types/Image';
+import { NitroImageUtil, type NitroImage } from '../utils/NitroImage';
 import {
   type HeaderActions,
   type NitroTemplateConfig,
@@ -20,10 +21,19 @@ const HybridPlaceListMapTemplate =
  *
  * `label` is at most three characters (the host enforces this) and is what the
  * host draws inside the pin. `color` applies to the pin and to the list row.
+ *
+ * `icon` replaces the host's pin face with an app-supplied bitmap, which is how
+ * a POI app gets its own marker art onto a host-rendered map. The host scales it
+ * down to fit a 72 x 72 dp box preserving aspect ratio, so supply art at roughly
+ * that size (144 px at 2x) with transparent padding. AndroidX forbids combining
+ * `icon` with `color` — `setColor` throws when the marker icon type is
+ * `TYPE_IMAGE` — so when `icon` is set, `color` is ignored and `label` is not
+ * drawn either, because an icon always takes precedence over a label.
  */
 export type AutoPlaceMarker = {
   label?: string;
   color?: ThemedColor | string;
+  icon?: AutoImage;
 };
 
 /**
@@ -66,6 +76,7 @@ export interface NitroAutoPlace {
   markerLabel?: string;
   markerColorLight?: number;
   markerColorDark?: number;
+  markerImage?: NitroImage;
 }
 
 export interface NitroPlaceRowConfig {
@@ -106,6 +117,7 @@ function convertPlace(place?: AutoPlace): NitroAutoPlace | undefined {
     markerLabel: marker?.label,
     markerColorLight: color?.lightColor,
     markerColorDark: color?.darkColor,
+    markerImage: marker?.icon == null ? undefined : NitroImageUtil.convert(marker.icon),
   };
 }
 

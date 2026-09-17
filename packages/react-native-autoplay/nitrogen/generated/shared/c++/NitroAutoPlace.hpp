@@ -28,10 +28,19 @@
 #error NitroModules cannot be found! Are you sure you installed NitroModules properly?
 #endif
 
-
+// Forward declaration of `GlyphImage` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct GlyphImage; }
+// Forward declaration of `AssetImage` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct AssetImage; }
+// Forward declaration of `RemoteImage` to properly resolve imports.
+namespace margelo::nitro::swe::iternio::reactnativeautoplay { struct RemoteImage; }
 
 #include <string>
 #include <optional>
+#include "GlyphImage.hpp"
+#include "AssetImage.hpp"
+#include "RemoteImage.hpp"
+#include <variant>
 
 namespace margelo::nitro::swe::iternio::reactnativeautoplay {
 
@@ -45,10 +54,11 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay {
     std::optional<std::string> markerLabel     SWIFT_PRIVATE;
     std::optional<double> markerColorLight     SWIFT_PRIVATE;
     std::optional<double> markerColorDark     SWIFT_PRIVATE;
+    std::optional<std::variant<GlyphImage, AssetImage, RemoteImage>> markerImage     SWIFT_PRIVATE;
 
   public:
     NitroAutoPlace() = default;
-    explicit NitroAutoPlace(double latitude, double longitude, std::optional<std::string> markerLabel, std::optional<double> markerColorLight, std::optional<double> markerColorDark): latitude(latitude), longitude(longitude), markerLabel(markerLabel), markerColorLight(markerColorLight), markerColorDark(markerColorDark) {}
+    explicit NitroAutoPlace(double latitude, double longitude, std::optional<std::string> markerLabel, std::optional<double> markerColorLight, std::optional<double> markerColorDark, std::optional<std::variant<GlyphImage, AssetImage, RemoteImage>> markerImage): latitude(latitude), longitude(longitude), markerLabel(markerLabel), markerColorLight(markerColorLight), markerColorDark(markerColorDark), markerImage(markerImage) {}
 
   public:
     friend bool operator==(const NitroAutoPlace& lhs, const NitroAutoPlace& rhs) = default;
@@ -68,7 +78,8 @@ namespace margelo::nitro {
         JSIConverter<double>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "longitude"))),
         JSIConverter<std::optional<std::string>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerLabel"))),
         JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerColorLight"))),
-        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerColorDark")))
+        JSIConverter<std::optional<double>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerColorDark"))),
+        JSIConverter<std::optional<std::variant<margelo::nitro::swe::iternio::reactnativeautoplay::GlyphImage, margelo::nitro::swe::iternio::reactnativeautoplay::AssetImage, margelo::nitro::swe::iternio::reactnativeautoplay::RemoteImage>>>::fromJSI(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerImage")))
       );
     }
     static inline jsi::Value toJSI(jsi::Runtime& runtime, const margelo::nitro::swe::iternio::reactnativeautoplay::NitroAutoPlace& arg) {
@@ -78,6 +89,7 @@ namespace margelo::nitro {
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "markerLabel"), JSIConverter<std::optional<std::string>>::toJSI(runtime, arg.markerLabel));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "markerColorLight"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.markerColorLight));
       obj.setProperty(runtime, PropNameIDCache::get(runtime, "markerColorDark"), JSIConverter<std::optional<double>>::toJSI(runtime, arg.markerColorDark));
+      obj.setProperty(runtime, PropNameIDCache::get(runtime, "markerImage"), JSIConverter<std::optional<std::variant<margelo::nitro::swe::iternio::reactnativeautoplay::GlyphImage, margelo::nitro::swe::iternio::reactnativeautoplay::AssetImage, margelo::nitro::swe::iternio::reactnativeautoplay::RemoteImage>>>::toJSI(runtime, arg.markerImage));
       return obj;
     }
     static inline bool canConvert(jsi::Runtime& runtime, const jsi::Value& value) {
@@ -93,6 +105,7 @@ namespace margelo::nitro {
       if (!JSIConverter<std::optional<std::string>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerLabel")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerColorLight")))) return false;
       if (!JSIConverter<std::optional<double>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerColorDark")))) return false;
+      if (!JSIConverter<std::optional<std::variant<margelo::nitro::swe::iternio::reactnativeautoplay::GlyphImage, margelo::nitro::swe::iternio::reactnativeautoplay::AssetImage, margelo::nitro::swe::iternio::reactnativeautoplay::RemoteImage>>>::canConvert(runtime, obj.getProperty(runtime, PropNameIDCache::get(runtime, "markerImage")))) return false;
       return true;
     }
   };

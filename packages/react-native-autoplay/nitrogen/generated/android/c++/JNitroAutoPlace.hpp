@@ -10,8 +10,18 @@
 #include <fbjni/fbjni.h>
 #include "NitroAutoPlace.hpp"
 
+#include "AssetImage.hpp"
+#include "GlyphImage.hpp"
+#include "JAssetImage.hpp"
+#include "JGlyphImage.hpp"
+#include "JNitroColor.hpp"
+#include "JRemoteImage.hpp"
+#include "JVariant_GlyphImage_AssetImage_RemoteImage.hpp"
+#include "NitroColor.hpp"
+#include "RemoteImage.hpp"
 #include <optional>
 #include <string>
+#include <variant>
 
 namespace margelo::nitro::swe::iternio::reactnativeautoplay {
 
@@ -42,12 +52,15 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay {
       jni::local_ref<jni::JDouble> markerColorLight = this->getFieldValue(fieldMarkerColorLight);
       static const auto fieldMarkerColorDark = clazz->getField<jni::JDouble>("markerColorDark");
       jni::local_ref<jni::JDouble> markerColorDark = this->getFieldValue(fieldMarkerColorDark);
+      static const auto fieldMarkerImage = clazz->getField<JVariant_GlyphImage_AssetImage_RemoteImage>("markerImage");
+      jni::local_ref<JVariant_GlyphImage_AssetImage_RemoteImage> markerImage = this->getFieldValue(fieldMarkerImage);
       return NitroAutoPlace(
         latitude,
         longitude,
         markerLabel != nullptr ? std::make_optional(markerLabel->toStdString()) : std::nullopt,
         markerColorLight != nullptr ? std::make_optional(markerColorLight->value()) : std::nullopt,
-        markerColorDark != nullptr ? std::make_optional(markerColorDark->value()) : std::nullopt
+        markerColorDark != nullptr ? std::make_optional(markerColorDark->value()) : std::nullopt,
+        markerImage != nullptr ? std::make_optional(markerImage->toCpp()) : std::nullopt
       );
     }
 
@@ -57,7 +70,7 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay {
      */
     [[maybe_unused]]
     static jni::local_ref<JNitroAutoPlace::javaobject> fromCpp(const NitroAutoPlace& value) {
-      using JSignature = JNitroAutoPlace(double, double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>);
+      using JSignature = JNitroAutoPlace(double, double, jni::alias_ref<jni::JString>, jni::alias_ref<jni::JDouble>, jni::alias_ref<jni::JDouble>, jni::alias_ref<JVariant_GlyphImage_AssetImage_RemoteImage>);
       static const auto clazz = javaClassStatic();
       static const auto create = clazz->getStaticMethod<JSignature>("fromCpp");
       return create(
@@ -66,7 +79,8 @@ namespace margelo::nitro::swe::iternio::reactnativeautoplay {
         value.longitude,
         value.markerLabel.has_value() ? jni::make_jstring(value.markerLabel.value()) : nullptr,
         value.markerColorLight.has_value() ? jni::JDouble::valueOf(value.markerColorLight.value()) : nullptr,
-        value.markerColorDark.has_value() ? jni::JDouble::valueOf(value.markerColorDark.value()) : nullptr
+        value.markerColorDark.has_value() ? jni::JDouble::valueOf(value.markerColorDark.value()) : nullptr,
+        value.markerImage.has_value() ? JVariant_GlyphImage_AssetImage_RemoteImage::fromCpp(value.markerImage.value()) : nullptr
       );
     }
   };

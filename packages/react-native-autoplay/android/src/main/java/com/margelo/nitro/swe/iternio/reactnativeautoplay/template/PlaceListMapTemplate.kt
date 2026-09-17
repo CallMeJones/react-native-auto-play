@@ -82,7 +82,21 @@ class PlaceListMapTemplate(context: CarContext, config: PlaceListMapTemplateConf
                                 val label = place.markerLabel
                                 val light = place.markerColorLight
                                 val dark = place.markerColorDark
-                                if (label != null || (light != null && dark != null)) {
+                                val icon = place.markerImage
+                                if (icon != null) {
+                                    // A custom bitmap replaces the host's pin face.
+                                    // AndroidX rejects setColor alongside a
+                                    // TYPE_IMAGE icon, so the tint is dropped and
+                                    // only the icon is applied.
+                                    setMarker(
+                                        PlaceMarker.Builder()
+                                            .setIcon(
+                                                Parser.parseImage(context, icon),
+                                                PlaceMarker.TYPE_IMAGE
+                                            )
+                                            .build()
+                                    )
+                                } else if (label != null || (light != null && dark != null)) {
                                     setMarker(
                                         PlaceMarker.Builder().apply {
                                             label?.let { setLabel(it) }

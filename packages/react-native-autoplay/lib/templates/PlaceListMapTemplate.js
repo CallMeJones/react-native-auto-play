@@ -1,6 +1,7 @@
 import { NitroModules } from 'react-native-nitro-modules';
 import { NitroColorUtil } from '../utils/NitroColor';
 import { NitroActionUtil } from '../utils/NitroAction';
+import { NitroImageUtil } from '../utils/NitroImage';
 import { Template, } from './Template';
 const HybridPlaceListMapTemplate = NitroModules.createHybridObject('PlaceListMapTemplate');
 function convertPlace(place) {
@@ -15,6 +16,7 @@ function convertPlace(place) {
         markerLabel: marker?.label,
         markerColorLight: color?.lightColor,
         markerColorDark: color?.darkColor,
+        markerImage: marker?.icon == null ? undefined : NitroImageUtil.convert(marker.icon),
     };
 }
 function convertRow(template, row) {
