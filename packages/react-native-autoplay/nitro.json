@@ -113,6 +113,12 @@
         "language": "swift"
       }
     },
+    "PlaceListMapTemplate": {
+      "android": {
+        "implementationClassName": "HybridPlaceListMapTemplate",
+        "language": "kotlin"
+      }
+    },
     "CarPlayDashboard": {
       "ios": {
         "implementationClassName": "HybridCarPlayDashboard",

@@ -16,6 +16,7 @@ import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.InformationTem
 import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.ListTemplate
 import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.MapTemplate
 import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.MessageTemplate
+import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.PlaceListMapTemplate
 import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.SearchTemplate
 import com.margelo.nitro.swe.iternio.reactnativeautoplay.template.SignInTemplate
 
@@ -70,6 +71,7 @@ class AndroidAutoScreen(
                     is SearchTemplateConfig -> config.headerActions?.find { it.type == NitroActionType.BACK }
                     is InformationTemplateConfig -> config.headerActions?.find { it.type == NitroActionType.BACK }
                     is SignInTemplateConfig -> config.headerActions?.find { it.type == NitroActionType.BACK }
+                    is PlaceListMapTemplateConfig -> config.headerActions?.find { it.type == NitroActionType.BACK }
                     else -> null
                 }
 
@@ -96,6 +98,7 @@ class AndroidAutoScreen(
             is SearchTemplateConfig -> SearchTemplate(carContext, config)
             is InformationTemplateConfig -> InformationTemplate(carContext, config)
             is SignInTemplateConfig -> SignInTemplate(carContext, config)
+            is PlaceListMapTemplateConfig -> PlaceListMapTemplate(carContext, config)
             else -> null
         }?.let {
             AndroidAutoTemplate.setTemplate(moduleName, it)

@@ -45,6 +45,7 @@
 #include "JFunc_void_AlertDismissalReason.hpp"
 #include "JFunc_void_std__string_std__string.hpp"
 #include "JHybridMessageTemplateSpec.hpp"
+#include "JHybridPlaceListMapTemplateSpec.hpp"
 #include "JHybridSearchTemplateSpec.hpp"
 #include "JHybridSignInTemplateSpec.hpp"
 #include "JFunc_void_std__optional_std__string__std__optional_GoogleSignInAccount_.hpp"
@@ -156,6 +157,14 @@ struct JHybridSearchTemplateSpecImpl: public jni::JavaClass<JHybridSearchTemplat
     return javaPart->getJHybridSearchTemplateSpec();
   }
 };
+struct JHybridPlaceListMapTemplateSpecImpl: public jni::JavaClass<JHybridPlaceListMapTemplateSpecImpl, JHybridPlaceListMapTemplateSpec::JavaPart> {
+  static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/swe/iternio/reactnativeautoplay/HybridPlaceListMapTemplate;";
+  static std::shared_ptr<JHybridPlaceListMapTemplateSpec> create() {
+    static const auto constructorFn = javaClassStatic()->getConstructor<JHybridPlaceListMapTemplateSpecImpl::javaobject()>();
+    jni::local_ref<JHybridPlaceListMapTemplateSpec::JavaPart> javaPart = javaClassStatic()->newObject(constructorFn);
+    return javaPart->getJHybridPlaceListMapTemplateSpec();
+  }
+};
 struct JHybridClusterSpecImpl: public jni::JavaClass<JHybridClusterSpecImpl, JHybridClusterSpec::JavaPart> {
   static constexpr auto kJavaDescriptor = "Lcom/margelo/nitro/swe/iternio/reactnativeautoplay/HybridCluster;";
   static std::shared_ptr<JHybridClusterSpec> create() {
@@ -200,6 +209,7 @@ void registerAllNatives() {
   margelo::nitro::swe::iternio::reactnativeautoplay::JFunc_void_AlertDismissalReason_cxx::registerNatives();
   margelo::nitro::swe::iternio::reactnativeautoplay::JFunc_void_std__string_std__string_cxx::registerNatives();
   margelo::nitro::swe::iternio::reactnativeautoplay::JHybridMessageTemplateSpec::CxxPart::registerNatives();
+  margelo::nitro::swe::iternio::reactnativeautoplay::JHybridPlaceListMapTemplateSpec::CxxPart::registerNatives();
   margelo::nitro::swe::iternio::reactnativeautoplay::JHybridSearchTemplateSpec::CxxPart::registerNatives();
   margelo::nitro::swe::iternio::reactnativeautoplay::JHybridSignInTemplateSpec::CxxPart::registerNatives();
   margelo::nitro::swe::iternio::reactnativeautoplay::JFunc_void_std__optional_std__string__std__optional_GoogleSignInAccount__cxx::registerNatives();
@@ -277,6 +287,12 @@ void registerAllNatives() {
     "SearchTemplate",
     []() -> std::shared_ptr<HybridObject> {
       return JHybridSearchTemplateSpecImpl::create();
+    }
+  );
+  HybridObjectRegistry::registerHybridObjectConstructor(
+    "PlaceListMapTemplate",
+    []() -> std::shared_ptr<HybridObject> {
+      return JHybridPlaceListMapTemplateSpecImpl::create();
     }
   );
   HybridObjectRegistry::registerHybridObjectConstructor(

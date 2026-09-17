@@ -44,6 +44,7 @@ export * from './templates/InformationTemplate';
 export * from './templates/ListTemplate';
 export * from './templates/MapTemplate';
 export * from './templates/MessageTemplate';
+export * from './templates/PlaceListMapTemplate';
 export * from './templates/SearchTemplate';
 export * from './templates/SignInTemplate';
 export * from './templates/Template';
