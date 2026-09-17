@@ -44,7 +44,7 @@ jobs:
 
           # Optional: Configure Claude's behavior with CLI arguments
           claude_args: |
-            --model claude-fable-5-1
+            --model fable
             --allowedTools "Read,Glob,Grep,WebSearch,WebFetch"
             --system-prompt "You are an experienced software developer specializing in React Native for iOS, Android, and web. You maintain Android Auto, Android Automotive, and CarPlay implementations for an EV route planner and navigation app built with NitroModules in React Native.
 
